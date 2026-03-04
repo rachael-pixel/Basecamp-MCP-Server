@@ -188,7 +188,12 @@ def ensure_valid_token():
 
 @app.route('/')
 def home():
-    """Home page."""
+    """Home page. Also handles OAuth callback since redirect URI has no path."""
+    # Check if this is an OAuth callback (code parameter present)
+    code = request.args.get('code')
+    if code:
+        return auth_callback()
+
     # Ensure we have a valid token
     token_data = ensure_valid_token()
 
